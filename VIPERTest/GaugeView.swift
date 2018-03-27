@@ -23,13 +23,13 @@ import UIKit
     
     // MARK: Public vars
     
-    @IBInspectable public var needleColor: UIColor = UIColor.whiteColor() {
+    @IBInspectable public var needleColor: UIColor = UIColor.white {
         didSet {
             setNeedsDisplay()
         }
     }
 
-    @IBInspectable public var gaugeBackgroundColor: UIColor = UIColor.redColor() {
+    @IBInspectable public var gaugeBackgroundColor: UIColor = UIColor.red {
         didSet {
             setNeedsDisplay()
         }
@@ -81,7 +81,7 @@ import UIKit
     }
 
     required public init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
         self.setup()
     }
     
@@ -91,8 +91,8 @@ import UIKit
         self.layer.addSublayer(self.needleLayer)
         
         self.layer.contentsGravity = kCAGravityCenter
-        self.opaque = false
-        self.contentMode = UIViewContentMode.Redraw
+        self.isOpaque = false
+        self.contentMode = UIViewContentMode.redraw
         
         let handlePanSelector: Selector = "handlePan:"
         self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: handlePanSelector))
@@ -100,31 +100,31 @@ import UIKit
     
     // MARK: Drawing
     
-    override public func drawRect(rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         drawBg()
         drawNeedle()
     }
     
     private func drawBg() {
         currentAngle = (endAngle - startAngle) / Float(levelsNumber) * Float(currentLevel) + startAngle
-        let viewCenter = CGPointMake(self.bounds.origin.x+self.bounds.width/2, self.bounds.origin.y+self.bounds.height/2)
+        let viewCenter = CGPoint(x: self.bounds.origin.x+self.bounds.width/2, y: self.bounds.origin.y+self.bounds.height/2)
         
         if (currentAngle > startAngle) {
             let backgroundPathLeft = UIBezierPath()
-            backgroundPathLeft.moveToPoint(viewCenter)
-            backgroundPathLeft.addArcWithCenter(viewCenter, radius: CGFloat(bounds.width/2), startAngle: CGFloat(startAngle), endAngle: CGFloat(currentAngle), clockwise: true)
-            leftBackgroundLayer.fillColor = gaugeBackgroundColor.CGColor
-            leftBackgroundLayer.strokeColor = UIColor.blackColor().CGColor
-            leftBackgroundLayer.path = backgroundPathLeft.CGPath;
+            backgroundPathLeft.move(to: viewCenter)
+            backgroundPathLeft.addArc(withCenter: viewCenter, radius: CGFloat(bounds.width/2), startAngle: CGFloat(startAngle), endAngle: CGFloat(currentAngle), clockwise: true)
+            leftBackgroundLayer.fillColor = gaugeBackgroundColor.cgColor
+            leftBackgroundLayer.strokeColor = UIColor.black.cgColor
+            leftBackgroundLayer.path = backgroundPathLeft.cgPath;
 //            leftBackgroundLayer.filters
         }
        
         let backgroundPathRight = UIBezierPath()
-        backgroundPathRight.moveToPoint(viewCenter)
-        backgroundPathRight.addArcWithCenter(viewCenter, radius: CGFloat(bounds.width/2), startAngle: CGFloat(currentAngle), endAngle: CGFloat(endAngle), clockwise: true)
-        rightBackgroundLayer.fillColor = lightBackgroundColor.CGColor
-        rightBackgroundLayer.strokeColor = UIColor.blackColor().CGColor
-        rightBackgroundLayer.path = backgroundPathRight.CGPath;
+        backgroundPathRight.move(to: viewCenter)
+        backgroundPathRight.addArc(withCenter: viewCenter, radius: CGFloat(bounds.width/2), startAngle: CGFloat(currentAngle), endAngle: CGFloat(endAngle), clockwise: true)
+        rightBackgroundLayer.fillColor = lightBackgroundColor.cgColor
+        rightBackgroundLayer.strokeColor = UIColor.black.cgColor
+        rightBackgroundLayer.path = backgroundPathRight.cgPath;
         
 //        let maskLayer: CAShapeLayer = CAShapeLayer()
 //        let maskPath = UIBezierPath()
@@ -136,37 +136,37 @@ import UIKit
     }
     
     private func drawNeedle() {
-        let viewCenter = CGPointMake(self.bounds.origin.x+self.bounds.width/2, self.bounds.origin.y+self.bounds.height/2)
+        let viewCenter = CGPoint(x: self.bounds.origin.x+self.bounds.width/2, y: self.bounds.origin.y+self.bounds.height/2)
         let needleRadius = CGFloat(bounds.width/2 * 0.2)
-        let topPoint: CGPoint = CGPointMake(viewCenter.x, viewCenter.y - bounds.height/2);
-        let startPoint: CGPoint = CGPointMake(viewCenter.x + needleRadius, viewCenter.y);
+        let topPoint: CGPoint = CGPoint(x: viewCenter.x, y: viewCenter.y - bounds.height/2);
+        let startPoint: CGPoint = CGPoint(x: viewCenter.x + needleRadius, y: viewCenter.y);
 
         let distance: CGFloat = CGFloat(bgRadius * 1.1);
         let starttime: CGFloat = 0.0;
         let endtime: CGFloat = CGFloat(M_PI);
         let topSpace: CGFloat = distance / 60.0;
         
-        let topPoint1: CGPoint = CGPointMake(viewCenter.x - topSpace, viewCenter.y - distance + (distance * 0.1));
-        let topPoint2: CGPoint = CGPointMake(viewCenter.x + topSpace, viewCenter.y - distance + (distance * 0.1));
-        let finishPoint: CGPoint = CGPointMake(viewCenter.x + CGFloat(needleRadius), viewCenter.y);
+        let topPoint1: CGPoint = CGPoint(x: viewCenter.x - topSpace, y: viewCenter.y - distance + (distance * 0.1));
+        let topPoint2: CGPoint = CGPoint(x: viewCenter.x + topSpace, y: viewCenter.y - distance + (distance * 0.1));
+        let finishPoint: CGPoint = CGPoint(x: viewCenter.x + CGFloat(needleRadius), y: viewCenter.y);
         
         let needlePath: UIBezierPath = UIBezierPath()
-        needlePath.moveToPoint(viewCenter)
-        needlePath.addArcWithCenter(viewCenter, radius: needleRadius, startAngle: 0, endAngle: CGFloat(startAngle), clockwise: true)
-        needlePath.addLineToPoint(topPoint)
-        needlePath.addLineToPoint(startPoint)
+        needlePath.move(to: viewCenter)
+        needlePath.addArc(withCenter: viewCenter, radius: needleRadius, startAngle: 0, endAngle: CGFloat(startAngle), clockwise: true)
+        needlePath.addLine(to: topPoint)
+        needlePath.addLine(to: startPoint)
         
-        var translate: CGAffineTransform = CGAffineTransformMakeTranslation(-1 * (self.bounds.origin.x + viewCenter.x), -1 * (self.bounds.origin.y + viewCenter.y))
-        needlePath.applyTransform(translate)
-        var rotate: CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(currentAngle + Float(M_PI_2)))
-        needlePath.applyTransform(rotate)
-        translate = CGAffineTransformMakeTranslation((self.bounds.origin.x + viewCenter.x), (self.bounds.origin.y + viewCenter.y))
-        needlePath.applyTransform(translate)
+        var translate: CGAffineTransform = CGAffineTransform(translationX: -1 * (self.bounds.origin.x + viewCenter.x), y: -1 * (self.bounds.origin.y + viewCenter.y))
+        needlePath.apply(translate)
+        var rotate: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(currentAngle + Float(M_PI_2)))
+        needlePath.apply(rotate)
+        translate = CGAffineTransform(translationX: (self.bounds.origin.x + viewCenter.x), y: (self.bounds.origin.y + viewCenter.y))
+        needlePath.apply(translate)
         
         needleColor.set()
-        needleLayer.fillColor = needleColor.CGColor
-        needleLayer.strokeColor = UIColor.blackColor().CGColor
-        needleLayer.path = needlePath.CGPath;
+        needleLayer.fillColor = needleColor.cgColor
+        needleLayer.strokeColor = UIColor.black.cgColor
+        needleLayer.path = needlePath.cgPath;
         
     }
     

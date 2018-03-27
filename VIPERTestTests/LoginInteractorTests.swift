@@ -33,7 +33,7 @@ class LoginInteractorTests: XCTestCase {
     }
     
     func testThatGetUsernameReturnsUsernameIfTheresAUser() {
-        loginDataManager.setCurrentUser(User(username: "pippo", mailAddress: "pippo@pluto.com"))
+        loginDataManager.setCurrentUser(user: User(username: "pippo", mailAddress: "pippo@pluto.com"))
         
         XCTAssertEqual(interactor.getUsername(), "pippo", "should return the username set in the data manager")
     }
@@ -45,7 +45,7 @@ class LoginInteractorTests: XCTestCase {
     }
     
     func testThatGetMailaddressReturnsMailaddressIfTheresAUser() {
-        loginDataManager.setCurrentUser(User(username: "pippo", mailAddress: "pippo@pluto.com"))
+        loginDataManager.setCurrentUser(user: User(username: "pippo", mailAddress: "pippo@pluto.com"))
         
         XCTAssertEqual(interactor.getMailAddress(), "pippo@pluto.com", "should return the mail address set in the data manager")
     }
@@ -55,38 +55,38 @@ class LoginInteractorTests: XCTestCase {
     }
     
     func testThatSetUserSetsUserForValidCredentials() {
-        interactor.setUser("pippo", mailAddress: "pippo@pluto.com")
+        interactor.setUser(username: "pippo", mailAddress: "pippo@pluto.com")
         
         XCTAssert(loginDataManager.getCurrentUser() != nil, "should be able to set a user in data manager ")
     }
     
     func testThatSetUserDoesntSetUserForInvalidCredentials() {
-        interactor.setUser("", mailAddress: "pippo@pluto.com")
+        interactor.setUser(username: "", mailAddress: "pippo@pluto.com")
         
         XCTAssert(loginDataManager.getCurrentUser() == nil, "shouldn't be able to set a user in data manager with invalid data")
         
-        interactor.setUser("pippo", mailAddress: "pippopluto.com")
+        interactor.setUser(username: "pippo", mailAddress: "pippopluto.com")
         
         XCTAssert(loginDataManager.getCurrentUser() == nil, "shouldn't be able to set a user in data manager with invalid data")
         
-        interactor.setUser("pippo", mailAddress: "pippo@pluto")
+        interactor.setUser(username: "pippo", mailAddress: "pippo@pluto")
         
         XCTAssert(loginDataManager.getCurrentUser() == nil, "shouldn't be able to set a user in data manager with invalid data")
         
-        interactor.setUser("pippo", mailAddress: "")
+        interactor.setUser(username: "pippo", mailAddress: "")
         
         XCTAssert(loginDataManager.getCurrentUser() == nil, "shouldn't be able to set a user in data manager with invalid data")
     }
     
     func testThatSetUserCallsDelegateForValidCredentials() {
-        interactor.setUser("pippo", mailAddress: "pippo@pluto.com")
+        interactor.setUser(username: "pippo", mailAddress: "pippo@pluto.com")
         
         XCTAssertTrue(loginViewInteractorDelegate.validCredentialsInsertedCalled, "should be called the right delegate when the user sets valid credentials")
         XCTAssertFalse(loginViewInteractorDelegate.invalidCredentialsInsertedCalled, "should be called the right delegate when the user sets valid credentials")
     }
     
     func testThatSetUserCallsDelegateForInvalidCredentials() {
-        interactor.setUser("pippo", mailAddress: "pippopluto.com")
+        interactor.setUser(username: "pippo", mailAddress: "pippopluto.com")
         
         XCTAssertFalse(loginViewInteractorDelegate.validCredentialsInsertedCalled, "should be called the right delegate when the user sets valid credentials")
         XCTAssertTrue(loginViewInteractorDelegate.invalidCredentialsInsertedCalled, "should be called the right delegate when the user sets valid credentials")

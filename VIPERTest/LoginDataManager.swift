@@ -28,7 +28,7 @@ class LoginDataManager {
     /// :param: user the user struct to save
     /// :returns: true if the User was successfully saved
     func setCurrentUser(user: User) -> Bool{
-        return UserDefaultsStore.saveCredentials((user.username, user.mailAddress))
+        return UserDefaultsStore.saveCredentials(credentials: (user.username, user.mailAddress))
     }
     
 }

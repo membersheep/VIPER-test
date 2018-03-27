@@ -21,10 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         if let window = window, let appInitializer = appInitializer {
-            appInitializer.installRootViewControllerIntoWindow(window)
+            appInitializer.installRootViewControllerIntoWindow(window: window)
         }
         else {
-            println("ERROR: window or initializer missing")
+            print("ERROR: window or initializer missing")
         }
         return true
     }

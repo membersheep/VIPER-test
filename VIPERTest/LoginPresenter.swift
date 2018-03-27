@@ -20,14 +20,14 @@ class LoginPresenter: LoginInteractorDelegate, LoginModuleInterface {
     }
     
     func saveUserData(username: String, mailAddress: String) {
-        interactor?.setUser(username, mailAddress: mailAddress)
+        interactor?.setUser(username: username, mailAddress: mailAddress)
     }
     
     func updateView() {
         if let user = interactor?.currentUser {
-            interface?.updateTextFieldsWithUsername(user.username, andAddress: user.mailAddress)
+            interface?.updateTextFieldsWithUsername(username: user.username, andAddress: user.mailAddress)
         } else {
-            interface?.updateTextFieldsWithUsername("", andAddress: "")
+            interface?.updateTextFieldsWithUsername(username: "", andAddress: "")
         }
     }
     
@@ -38,8 +38,8 @@ class LoginPresenter: LoginInteractorDelegate, LoginModuleInterface {
     }
     
     func validCredentialsInserted() {
-        interface?.prepareToGoToNextModule({completion in
-            wireframe?.goToMainModule()
+        interface?.prepareToGoToNextModule(completion: {completion in
+            self.wireframe?.goToMainModule()
         })
     }
 }

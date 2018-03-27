@@ -24,14 +24,14 @@ class AppInitializerTests: XCTestCase {
     
     // MARK: Test installRootViewControllerIntoWindow
     func testThatShowsALoginViewControllerWhenThereAreNoCredentials() {
-        UserDefaultsStore.removeFromUserDefaults(UserDefaultsStore.usernameKey)
-        UserDefaultsStore.removeFromUserDefaults(UserDefaultsStore.mailKey)
+        UserDefaultsStore.removeFromUserDefaults(key: UserDefaultsStore.usernameKey)
+        UserDefaultsStore.removeFromUserDefaults(key: UserDefaultsStore.mailKey)
         
         let window = UIWindow()
         let navController = UINavigationController()
         window.rootViewController = navController
         
-        appInitializer.installRootViewControllerIntoWindow(window)
+        appInitializer.installRootViewControllerIntoWindow(window: window)
         
         if let rootVC = window.rootViewController as? UINavigationController{
             if let loginVC = rootVC.viewControllers[0] as? UIViewController {
@@ -45,14 +45,14 @@ class AppInitializerTests: XCTestCase {
     }
     
     func testThatShowsAMainViewControllerWhenThereAreCredentials() {
-        UserDefaultsStore.saveToUserDefaults("pippo", key: UserDefaultsStore.usernameKey)
-        UserDefaultsStore.saveToUserDefaults("pippo@pluto.com", key: UserDefaultsStore.mailKey)
+        UserDefaultsStore.saveToUserDefaults(object: "pippo" as AnyObject, key: UserDefaultsStore.usernameKey)
+        UserDefaultsStore.saveToUserDefaults(object: "pippo@pluto.com" as AnyObject, key: UserDefaultsStore.mailKey)
         
         let window = UIWindow()
         let navController = UINavigationController()
         window.rootViewController = navController
         
-        appInitializer.installRootViewControllerIntoWindow(window)
+        appInitializer.installRootViewControllerIntoWindow(window: window)
         
         if let rootVC = window.rootViewController as? UINavigationController {
             if let mainVC = rootVC.viewControllers[0] as? UIViewController {

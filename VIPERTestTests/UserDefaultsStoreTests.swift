@@ -12,7 +12,7 @@ import VIPERTest
 
 class UserDefaultsStoreTests: XCTestCase {
     
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     
     
     override func setUp() {
@@ -24,24 +24,24 @@ class UserDefaultsStoreTests: XCTestCase {
     }
     
     func testLoadFromUserDefaults() {
-        defaults.setObject("pippo", forKey: "pippo")
+        defaults.set("pippo", forKey: "pippo")
         defaults.synchronize()
         
-        var result = UserDefaultsStore.loadFromUserDefaults("pippo") as? String
+        var result = UserDefaultsStore.loadFromUserDefaults(key: "pippo") as? String
         
         if let result = result {
             XCTAssertTrue(result == "pippo", "should be the same value saved")
         } else {
             XCTFail("should load a saved value for a key")
         }
-       defaults.removeObjectForKey("pippo")
+        defaults.removeObject(forKey: "pippo")
        defaults.synchronize()
     }
     
     func testSaveToUserDefaults() {
-        UserDefaultsStore.saveToUserDefaults("pippo", key: "pippo")
+        UserDefaultsStore.saveToUserDefaults(object: "pippo" as AnyObject, key: "pippo")
         
-        let result = defaults.objectForKey("pippo") as? String
+        let result = defaults.object(forKey: "pippo") as? String
         
         if let result = result {
             XCTAssertTrue(result == "pippo", "should be the same value saved")
@@ -49,47 +49,47 @@ class UserDefaultsStoreTests: XCTestCase {
             XCTFail("should save a value for a key")
         }
         
-        defaults.removeObjectForKey("pippo")
+        defaults.removeObject(forKey: "pippo")
         defaults.synchronize()
     }
     
     func testRemoveFromUserDefaults() {
-        defaults.setObject("pippo", forKey: "pippo")
+        defaults.set("pippo", forKey: "pippo")
         defaults.synchronize()
         
-        UserDefaultsStore.removeFromUserDefaults("pippo")
+        UserDefaultsStore.removeFromUserDefaults(key: "pippo")
         
-        let result: AnyObject? = defaults.objectForKey("pippo")
+        let result: AnyObject? = defaults.object(forKey: "pippo") as AnyObject
         
         XCTAssertNil(result, "should not find a value")
         
-        defaults.removeObjectForKey("pippo")
+        defaults.removeObject(forKey: "pippo")
         defaults.synchronize()
     }
     
     func testRemoveAllEntries() {
-        defaults.setObject("pippo", forKey: "pippo")
-        defaults.setObject("pluto", forKey: "pluto")
+        defaults.set("pippo", forKey: "pippo")
+        defaults.set("pluto", forKey: "pluto")
         defaults.synchronize()
         
         UserDefaultsStore.removeAllEntries()
         
-        let firstResult: AnyObject? = defaults.objectForKey("pippo")
-        let secondResult: AnyObject? = defaults.objectForKey("pluto")
+        let firstResult: AnyObject? = defaults.object(forKey: "pippo") as AnyObject
+        let secondResult: AnyObject? = defaults.object(forKey: "pluto") as AnyObject
         
         XCTAssertNil(firstResult, "should not find a value")
         XCTAssertNil(secondResult, "should not find a value")
         
-        defaults.removeObjectForKey("pippo")
-        defaults.removeObjectForKey("pluto")
+        defaults.removeObject(forKey: "pippo")
+        defaults.removeObject(forKey: "pluto")
         defaults.synchronize()
     }
     
     func testSaveCredentials() {
-        UserDefaultsStore.saveCredentials(("pippo", "pluto"))
+        UserDefaultsStore.saveCredentials(credentials: ("pippo", "pluto"))
         
-        let username = defaults.objectForKey(UserDefaultsStore.usernameKey) as? String
-        let mail = defaults.objectForKey(UserDefaultsStore.mailKey) as? String
+        let username = defaults.object(forKey: UserDefaultsStore.usernameKey) as? String
+        let mail = defaults.object(forKey: UserDefaultsStore.mailKey) as? String
         
         if let username = username {
             XCTAssertTrue(username == "pippo", "should be the same value saved")
@@ -103,15 +103,15 @@ class UserDefaultsStoreTests: XCTestCase {
             XCTFail("should save a value for a key")
         }
         
-        defaults.removeObjectForKey(UserDefaultsStore.usernameKey)
-        defaults.removeObjectForKey(UserDefaultsStore.mailKey)
+        defaults.removeObject(forKey: UserDefaultsStore.usernameKey)
+        defaults.removeObject(forKey: UserDefaultsStore.mailKey)
         
         defaults.synchronize()
     }
     
     func testLoadCredentials() {
-        defaults.setObject("pippo", forKey: UserDefaultsStore.usernameKey)
-        defaults.setObject("pluto", forKey: UserDefaultsStore.mailKey)
+        defaults.set("pippo", forKey: UserDefaultsStore.usernameKey)
+        defaults.set("pluto", forKey: UserDefaultsStore.mailKey)
         defaults.synchronize()
         
         let result = UserDefaultsStore.loadCredentials()
@@ -122,8 +122,8 @@ class UserDefaultsStoreTests: XCTestCase {
         } else {
             XCTFail("should load a saved value for a key")
         }
-        defaults.removeObjectForKey(UserDefaultsStore.usernameKey)
-        defaults.removeObjectForKey(UserDefaultsStore.mailKey)
+        defaults.removeObject(forKey: UserDefaultsStore.usernameKey)
+        defaults.removeObject(forKey: UserDefaultsStore.mailKey)
         defaults.synchronize()
     }
 }

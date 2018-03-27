@@ -22,27 +22,27 @@ class UserDefaultsStore {
     // MARK: User Defaults methods. generic user defaults wrapper
     
     static func loadFromUserDefaults(key: String) -> (AnyObject?){
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let object: AnyObject? = defaults.objectForKey(key)
+        let defaults = UserDefaults.standard
+        let object: AnyObject? = defaults.object(forKey: key) as AnyObject
         return object
     }
     
     static func saveToUserDefaults(object:AnyObject, key: String) -> Bool{
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(object, forKey: key)
+        let defaults = UserDefaults.standard
+        defaults.set(object, forKey: key)
         return defaults.synchronize()
     }
     
     static func removeFromUserDefaults(key: String) -> Bool{
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.removeObjectForKey(key)
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: key)
         return defaults.synchronize()
     }
     
     static func removeAllEntries() -> Bool{
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
         for key in defaults.dictionaryRepresentation().keys {
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
+            UserDefaults.standard.removeObject(forKey: key.description)
         }
         return defaults.synchronize()
     }
@@ -53,14 +53,14 @@ class UserDefaultsStore {
     ///
     /// :returns: The result of the operation (successfull or unsuccessfull)
     static func saveCredentials(credentials: CredentialsTuple) -> Bool{
-        UserDefaultsStore.saveToUserDefaults(credentials.username, key: UserDefaultsStore.usernameKey)
-        return UserDefaultsStore.saveToUserDefaults(credentials.mailAddress, key: UserDefaultsStore.mailKey)
+        UserDefaultsStore.saveToUserDefaults(object: credentials.username as AnyObject, key: UserDefaultsStore.usernameKey)
+        return UserDefaultsStore.saveToUserDefaults(object: credentials.mailAddress as AnyObject, key: UserDefaultsStore.mailKey)
     }
     
     /// :returns: The username and password as a credentials tuple or nil if they aren't there
     static func loadCredentials() -> CredentialsTuple? {
-        let username: String? = UserDefaultsStore.loadFromUserDefaults(UserDefaultsStore.usernameKey) as? String
-        let mailAddress: String? = UserDefaultsStore.loadFromUserDefaults(UserDefaultsStore.mailKey) as? String
+        let username: String? = UserDefaultsStore.loadFromUserDefaults(key: UserDefaultsStore.usernameKey) as? String
+        let mailAddress: String? = UserDefaultsStore.loadFromUserDefaults(key: UserDefaultsStore.mailKey) as? String
         if let username = username, let mailAddress = mailAddress {
             return (username, mailAddress)
         } else {

@@ -28,13 +28,13 @@ import UIKit
         }
     }
 
-    @IBInspectable public var borderBackgroundColor: UIColor = UIColor.darkGrayColor() {
+    @IBInspectable public var borderBackgroundColor: UIColor = UIColor.darkGray {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    @IBInspectable public var borderColor: UIColor = UIColor.grayColor() {
+    @IBInspectable public var borderColor: UIColor = UIColor.gray {
         didSet {
             setNeedsDisplay()
         }
@@ -46,7 +46,7 @@ import UIKit
         }
     }
     
-    @IBInspectable public var centerColor: UIColor = UIColor.whiteColor() {
+    @IBInspectable public var centerColor: UIColor = UIColor.white {
         didSet {
             setNeedsDisplay()
         }
@@ -60,14 +60,14 @@ import UIKit
     }
     
     required public init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
         self.setup()
     }
 
     // MARK: Private functions
     
     private func setup() {
-        self.backgroundColor = UIColor.clearColor();
+        self.backgroundColor = UIColor.clear;
         self.layer.addSublayer(self.backgroundCircleLayer)
         self.layer.addSublayer(self.borderCircleLayer)
         self.layer.addSublayer(self.centerCircleLayer)
@@ -77,12 +77,12 @@ import UIKit
     ///
     /// :returns: the path to draw the stroke on
     private func borderCirclePath() -> UIBezierPath {
-        let center = CGPointMake(self.bounds.midX, self.bounds.midY)
+        let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
         let radius = self.bounds.width / 2.0
         let startAngle:CGFloat = CGFloat(270.0 * M_PI / 180.0)
         let endAngle:CGFloat = CGFloat((1 * 360.0 + 270.0) * M_PI / 180.0)
         var borderPath = UIBezierPath()
-        borderPath.addArcWithCenter(center, radius:radius-borderWidth/2, startAngle:startAngle, endAngle:endAngle, clockwise:true)
+        borderPath.addArc(withCenter: center, radius:radius-borderWidth/2, startAngle:startAngle, endAngle:endAngle, clockwise:true)
         return borderPath
     }
 
@@ -97,16 +97,16 @@ import UIKit
         animation.fromValue = 0.0
         animation.toValue = targetProgress
         borderCircleLayer.strokeEnd = CGFloat(targetProgress)
-        borderCircleLayer.addAnimation(animation, forKey: "path")
+        borderCircleLayer.add(animation, forKey: "path")
         
         // Flip the view after completion and change label text
-        UIView.animateWithDuration(0.2, delay: duration, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.transform = CGAffineTransformMakeScale(0.0000001, 1);
+        UIView.animate(withDuration: 0.2, delay: duration, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.0000001, y: 1);
             }, completion:{
                 (value: Bool) in
                 self.titleLabel!.text = " Done!"
-                UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    self.transform = CGAffineTransformMakeScale(1, 1);
+                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.transform = CGAffineTransform(scaleX: 1, y: 1);
                     }, completion:{
                         (value: Bool) in
                         return
@@ -114,14 +114,14 @@ import UIKit
         })
     }
     
-    override public func drawRect(rect: CGRect) {
+    /*override public func draw(_ rect: CGRect) {
         let innerRect = CGRectInset(rect, borderWidth, borderWidth)
-        let outerRect = CGRectInset(rect, 0, 0)
+        let outerRect = CGRect.insetBy(rect)
         
         // Background Drawing
         let backgroundPath = UIBezierPath(ovalInRect: CGRectMake(outerRect.minX, outerRect.minY, CGRectGetWidth(outerRect), CGRectGetHeight(outerRect)))
         backgroundPath.fill();
-        backgroundCircleLayer.fillColor = borderBackgroundColor.CGColor
+        backgroundCircleLayer.fillColor = borderBackgroundColor.cgColor
         backgroundCircleLayer.strokeColor = UIColor.blackColor().CGColor
         backgroundCircleLayer.path = backgroundPath.CGPath;
         
@@ -141,5 +141,5 @@ import UIKit
         centerCircleLayer.fillColor = centerColor.CGColor
         centerCircleLayer.strokeColor = UIColor.blackColor().CGColor
         centerCircleLayer.path = centerPath.CGPath;
-    }
+    }*/
 }

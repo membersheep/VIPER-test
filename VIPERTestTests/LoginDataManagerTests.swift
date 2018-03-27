@@ -33,13 +33,13 @@ class LoginDataManagerTests: XCTestCase {
     }
     
     func testThatGetCurrentUserReturnsAUserIfTheresAUserSavedInUserDefaults() {
-        UserDefaultsStore.saveCredentials(("pippo", "pippo@pluto.com"))
+        UserDefaultsStore.saveCredentials(credentials: ("pippo", "pippo@pluto.com"))
         
         XCTAssert(dataManager.getCurrentUser() != nil, "should return nil when there's no user saved")
     }
     
     func testThatSetCurrentUserSavesCurrentUserInUserDefaults() {
-        dataManager.setCurrentUser(User(username: "pippo", mailAddress: "pippo@pluto.com"))
+        dataManager.setCurrentUser(user: User(username: "pippo", mailAddress: "pippo@pluto.com"))
         
         XCTAssert(UserDefaultsStore.loadCredentials() != nil, "should save credentials when I just saved a user")
         

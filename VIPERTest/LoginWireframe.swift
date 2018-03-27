@@ -22,14 +22,14 @@ class LoginWireframe {
     var mainWireframe : MainWireframe?
     
     func showLoginModuleAsRoot() {
-        loginViewController = UIStoryboard(name: "Main", bundle: NSBundle(forClass: self.dynamicType)).instantiateViewControllerWithIdentifier(LoginViewControllerIdentifier) as? LoginViewController
+        loginViewController = UIStoryboard(name: "Main", bundle: Bundle(for: type(of: self))).instantiateViewController(withIdentifier: LoginViewControllerIdentifier) as? LoginViewController
         
         if let loginViewController = loginViewController {
             loginViewController.loginModule = presenter
             presenter?.interface = loginViewController
-            rootWireframe?.showRootViewController(loginViewController)
+            rootWireframe?.showRootViewController(viewController: loginViewController)
         } else {
-            println("ERROR: View controller from storyboard not found")
+            print("ERROR: View controller from storyboard not found")
         }
     }
     

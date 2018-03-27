@@ -50,9 +50,9 @@ class LoginInteractor {
     /// Tries to set the username and the mail address, verifying their validity
     ///
     func setUser(username: String, mailAddress: String) {
-        if (isValidUsername(username) && isValidEmail(mailAddress)) {
+        if (isValidUsername(testStr: username) && isValidEmail(testStr: mailAddress)) {
             currentUser = User(username: username, mailAddress: mailAddress)
-            loginDataManager.setCurrentUser(currentUser!)
+            loginDataManager.setCurrentUser(user: currentUser!)
             delegate?.validCredentialsInserted()
         } else {
             delegate?.invalidCredentialsInserted()
@@ -68,7 +68,7 @@ class LoginInteractor {
     private func isValidEmail(testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
+        return emailTest.evaluate(with: testStr)
     }
     
     private func updateCurrentUser() {

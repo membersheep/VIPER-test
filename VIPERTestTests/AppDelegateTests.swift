@@ -34,12 +34,12 @@ class AppDelegateTests: XCTestCase {
     // MARK: Test after application launch
     
     func testWindowIsKeyAfterApplicationLaunch() {
-        let mainAppDelegate = UIApplication.sharedApplication().delegate
+        let mainAppDelegate = UIApplication.shared.delegate
         
         if let mainAppDelegate = mainAppDelegate {
             if let window = mainAppDelegate.window {
                 if let window = window {
-                    XCTAssertTrue(window.keyWindow, "app delegate's window should be key");
+                    XCTAssertTrue(window.isKeyWindow)
                 }
                 else {
                     XCTFail("app delegate window should not be nil")
@@ -54,7 +54,7 @@ class AppDelegateTests: XCTestCase {
     }
     
     func testThatDidFinishLaunchingWithOptionsReturnsTrue() {
-        XCTAssertTrue(appDelegate.application(UIApplication.sharedApplication(), didFinishLaunchingWithOptions: nil), "should return true from didFinishLaunchingWithOptions")
+        XCTAssertTrue(appDelegate.application(application: UIApplication.shared, didFinishLaunchingWithOptions: nil), "should return true from didFinishLaunchingWithOptions")
     }
 }
 

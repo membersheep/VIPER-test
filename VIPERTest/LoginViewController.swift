@@ -15,7 +15,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     
     @IBOutlet weak var scrollView: UIScrollView?
     
-    var scrollViewOffset: CGPoint = CGPointZero
+    var scrollViewOffset: CGPoint = CGPoint.zero
     
     @IBOutlet weak var titleView: UIView?
     
@@ -38,13 +38,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
         loginModule?.updateView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         registerToKeyboardNotifications()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         usernameTextField!.alpha = 0;
@@ -55,7 +55,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
         slideUpTitle()
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         unregisterFromKeyboardNotifications()
@@ -65,20 +65,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     
     func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
-        let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue().height
+        let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
         let textFieldBottomPoint = view.bounds.height - mailTextField!.frame.origin.y - mailTextField!.frame.height
-        scrollView?.setContentOffset(CGPointMake(0, keyboardHeight - textFieldBottomPoint + 8.0), animated: true)
+        scrollView?.setContentOffset(CGPoint(x: 0, y: keyboardHeight - textFieldBottomPoint + 8.0), animated: true)
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        scrollView?.setContentOffset(CGPointMake(scrollViewOffset.x, scrollViewOffset.y), animated: true)
+        scrollView?.setContentOffset(CGPoint(x: scrollViewOffset.x, y: scrollViewOffset.y), animated: true)
     }
     
     // MARK: Touch events delegate methods (Controller)
-    
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches, with: event)
     }
     
     // MARK: UITextField delegate methods (Controller)
@@ -93,9 +92,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     
     @IBAction func saveButtonPressed(sender: AnyObject) {
         if let usernameTextField = usernameTextField, let mailTextField = mailTextField {
-            loginModule?.saveUserData(usernameTextField.text, mailAddress: mailTextField.text)
+            loginModule?.saveUserData(username: usernameTextField.text!, mailAddress: mailTextField.text!)
         } else {
-            println("ERROR: usernameTextField or mailTextField not found")
+            print("ERROR: usernameTextField or mailTextField not found")
         }
     }
     
@@ -112,7 +111,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     
     func prepareToGoToNextModule(completion: ((Bool) -> Void)?) {
         fadeOutTextFieldsAndButton()
-        slideDownTitle(completion)
+        slideDownTitle(completion: completion)
     }
     
     // MARK: PRIVATE
@@ -124,41 +123,41 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     }
     
     private func configureViews() {
-        usernameTextField!.layer.borderColor = UIColor.MOREOrange().CGColor
+        usernameTextField!.layer.borderColor = UIColor.MOREOrange().cgColor
         usernameTextField!.layer.borderWidth = 2.0;
         usernameTextField!.layer.cornerRadius = 8.0;
         usernameTextField!.layer.masksToBounds = true;
         usernameTextField!.delegate = self
         
-        mailTextField!.layer.borderColor = UIColor.MOREOrange().CGColor
+        mailTextField!.layer.borderColor = UIColor.MOREOrange().cgColor
         mailTextField!.layer.borderWidth = 2.0;
         mailTextField!.layer.cornerRadius = 8.0;
         mailTextField!.layer.masksToBounds = true;
         mailTextField!.delegate = self
         
-        saveButton!.layer.borderColor = UIColor.MOREGray().CGColor
+        saveButton!.layer.borderColor = UIColor.MOREGray().cgColor
         saveButton!.layer.borderWidth = 2.0;
         saveButton!.layer.cornerRadius = 8.0;
         saveButton!.layer.masksToBounds = true;
     }
     
     private func registerToKeyboardNotifications() {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     private func unregisterFromKeyboardNotifications() {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // MARK: Animations
     
     private func slideUpTitle() {
         titleViewCenterConstraint.constant = view.frame.height / 2.0 - titleView!.frame.height / 2.0 - 64
-        UIView.animateWithDuration(1.0, delay: 0.5, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.view.layoutIfNeeded()
             }, completion: { completed in
         })
@@ -167,21 +166,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate, LoginUserInter
     
     private func slideDownTitle(completion: ((Bool) -> Void)?) {
         titleViewCenterConstraint.constant = 0
-        UIView.animateWithDuration(1.0, delay: 0.5, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.view.layoutIfNeeded()
             }, completion: completion)
     }
     
     private func fadeInTextFieldsAndButton() {
-        usernameTextField?.fadeIn(1.0, delay: 1.0)
-        mailTextField?.fadeIn(1.0, delay: 1.0)
-        saveButton?.fadeIn(1.0, delay: 1.0)
+        usernameTextField?.fadeIn(duration: 1.0, delay: 1.0)
+        mailTextField?.fadeIn(duration: 1.0, delay: 1.0)
+        saveButton?.fadeIn(duration: 1.0, delay: 1.0)
     }
     
     private func fadeOutTextFieldsAndButton() {
-        usernameTextField?.fadeOut(1.0, delay: 0.0)
-        mailTextField?.fadeOut(1.0, delay: 0.0)
-        saveButton?.fadeOut(1.0, delay: 0.0)
+        usernameTextField?.fadeOut(duration: 1.0, delay: 0.0)
+        mailTextField?.fadeOut(duration: 1.0, delay: 0.0)
+        saveButton?.fadeOut(duration: 1.0, delay: 0.0)
     }
     
     private func shakeTextFields() {

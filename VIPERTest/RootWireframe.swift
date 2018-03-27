@@ -15,13 +15,13 @@ class RootWireframe {
     
     func showRootViewController(viewController: UIViewController) {
         if let window = window {
-            if let navigationController = navigationControllerFromWindow(window) {
+            if let navigationController = navigationControllerFromWindow(window: window) {
                 navigationController.viewControllers = [viewController]
             } else {
-                println("ERROR: Window cannot be nil")
+                print("ERROR: Window cannot be nil")
             }
         } else {
-            println("ERROR: Window cannot be nil")
+            print("ERROR: Window cannot be nil")
         }
     }
     
@@ -29,7 +29,7 @@ class RootWireframe {
         if let navigationController = window.rootViewController as? UINavigationController {
             return navigationController
         } else {
-            println("ERROR: No navigation controller found")
+            print("ERROR: No navigation controller found")
             return nil
         }
     }

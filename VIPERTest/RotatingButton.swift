@@ -28,7 +28,7 @@ import UIKit
     }
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     var animationEndedClosure: (() -> ())?
@@ -44,7 +44,7 @@ import UIKit
         rotateAnimation.fromValue = 0.0
         rotateAnimation.toValue = targetRotation
         rotateAnimation.duration = Double(animationDuration)
-        layer.addAnimation(rotateAnimation, forKey: "rotationAnimation");
+        layer.add(rotateAnimation, forKey: "rotationAnimation");
         CATransaction.commit()
     }
     

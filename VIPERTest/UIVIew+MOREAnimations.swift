@@ -16,25 +16,25 @@ enum SlideDirection {
 
 extension UIView {
     
-    func fadeIn(duration: NSTimeInterval, delay: NSTimeInterval = 0.0, options:UIViewAnimationOptions = UIViewAnimationOptions.allZeros, completion: ((Bool)->(Void))? = nil) {
-        UIView.animateWithDuration(duration, delay: delay, options: options, animations: {
+    func fadeIn(duration: TimeInterval, delay: TimeInterval = 0.0, options:UIViewAnimationOptions = UIViewAnimationOptions.curveEaseIn, completion: ((Bool)->(Void))? = nil) {
+        UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
             self.alpha = 1.0
         }, completion: completion)
     }
     
-    func fadeOut(duration: NSTimeInterval, delay: NSTimeInterval = 0.0, options:UIViewAnimationOptions = UIViewAnimationOptions.allZeros, completion: ((Bool)->(Void))? = nil) {
-        UIView.animateWithDuration(duration, delay: delay, options: options, animations: {
+    func fadeOut(duration: TimeInterval, delay: TimeInterval = 0.0, options:UIViewAnimationOptions = UIViewAnimationOptions.curveEaseOut, completion: ((Bool)->(Void))? = nil) {
+        UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
             self.alpha = 0.0
             }, completion: completion)
     }
     
-    func shakeAnimation(duration: NSTimeInterval = 0.07, repeatCount: Float = 4, offset: Float = 10) {
+    func shakeAnimation(duration: TimeInterval = 0.07, repeatCount: Float = 4, offset: Float = 10) {
         let animation = CABasicAnimation(keyPath: "position")
         animation.duration = duration
         animation.repeatCount = repeatCount
         animation.autoreverses = true
-        animation.fromValue = NSValue(CGPoint: CGPointMake(self.center.x - CGFloat(offset), self.center.y))
-        animation.toValue = NSValue(CGPoint: CGPointMake(self.center.x + CGFloat(offset), self.center.y))
-        self.layer.addAnimation(animation, forKey: "position")
+        animation.fromValue = NSValue(cgPoint: CGPoint(x:self.center.x - CGFloat(offset), y: self.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x + CGFloat(offset), y: self.center.y))
+        self.layer.add(animation, forKey: "position")
     }
 }
