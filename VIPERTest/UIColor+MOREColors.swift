@@ -11,15 +11,15 @@ import UIKit
 
 extension UIColor {
     
-    public static func MOREOrange() -> UIColor {
+    @objc public static func MOREOrange() -> UIColor {
         return UIColor(red: 236.0/255.0, green: 175.0/255.0, blue: 96.0/255.0, alpha: 1)
     }
     
-    public static func MOREGray() -> UIColor {
+    @objc public static func MOREGray() -> UIColor {
         return UIColor(red: 43.0/255.0, green: 43.0/255.0, blue: 43.0/255.0, alpha: 1)
     }
     
-    public static func MOREBackgroundGray() -> UIColor {
+    @objc public static func MOREBackgroundGray() -> UIColor {
         return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 60.0/255.0, alpha: 1)
     }
 }

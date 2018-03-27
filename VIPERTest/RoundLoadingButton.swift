@@ -32,13 +32,13 @@ import UIKit
         }
     }
     
-    @IBInspectable public var borderBackgroundColor: UIColor = UIColor.darkGrayColor() {
+    @IBInspectable public var borderBackgroundColor: UIColor = UIColor.darkGray {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    @IBInspectable public var borderColor: UIColor = UIColor.grayColor() {
+    @IBInspectable public var borderColor: UIColor = UIColor.gray {
         didSet {
             setNeedsDisplay()
         }
@@ -50,7 +50,7 @@ import UIKit
         }
     }
     
-    @IBInspectable public var centerColor: UIColor = UIColor.whiteColor() {
+    @IBInspectable public var centerColor: UIColor = UIColor.white {
         didSet {
             setNeedsDisplay()
         }
@@ -64,14 +64,14 @@ import UIKit
     }
     
     required public init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
         self.setup()
     }
     
     // MARK: Private functions
     
     private func setup() {
-        self.backgroundColor = UIColor.clearColor();
+        self.backgroundColor = UIColor.clear;
         self.layer.addSublayer(self.backgroundCircleLayer)
         self.layer.addSublayer(self.borderCircleLayer)
         self.layer.addSublayer(self.centerCircleLayer)
@@ -83,15 +83,15 @@ import UIKit
     /// :param: newTitle The new button title to be displayed
     /// :param: duration The duration of the flip animation in seconds
     public func startLoadingAnimationWithTitle(newTitle: String, inTime duration: Double) {
-        UIView.animateWithDuration(duration, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.transform = CGAffineTransformMakeScale(0.0000001, 1);
+        UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.0000001, y: 1);
             }, completion:{
                 (value: Bool) in
                 self.titleLabel!.text = newTitle
                 self.titleLabel!.sizeToFit()
                 self.isLoading = true
-                UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    self.transform = CGAffineTransformMakeScale(1, 1);
+                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.transform = CGAffineTransform(scaleX: 1, y: 1);
                     }, completion:{
                         (value: Bool) in
                         return
@@ -104,15 +104,15 @@ import UIKit
     /// :param: newTitle The new button title to be displayed
     /// :param: duration The duration of the flip animation in seconds
     public func stopLoadingAnimationWithTitle(newTitle: String, inTime duration: Double) {
-        UIView.animateWithDuration(duration, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.transform = CGAffineTransformMakeScale(0.0000001, 1);
+        UIView.animate(withDuration: duration, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.0000001, y: 1);
             }, completion:{
                 (value: Bool) in
                 self.titleLabel!.text = newTitle
                 self.titleLabel!.sizeToFit()
                 self.isLoading = false
-                UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    self.transform = CGAffineTransformMakeScale(1, 1);
+                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.transform = CGAffineTransform(scaleX: 1, y: 1);
                     }, completion:{
                         (value: Bool) in
                         if (value) {
@@ -124,12 +124,12 @@ import UIKit
     }
     
     private func drawBackground() {
-        let outerRect = CGRectInset(self.bounds, 0, 0)
-        let backgroundPath = UIBezierPath(ovalInRect: CGRectMake(outerRect.minX, outerRect.minY, CGRectGetWidth(outerRect), CGRectGetHeight(outerRect)))
+        let outerRect = self.bounds.insetBy(dx: 0, dy: 0)
+        let backgroundPath = UIBezierPath(ovalIn: CGRect(x: outerRect.minX, y: outerRect.minY, width: outerRect.width, height: outerRect.height))
         backgroundPath.fill();
-        backgroundCircleLayer.fillColor = borderBackgroundColor.CGColor
-        backgroundCircleLayer.strokeColor = UIColor.blackColor().CGColor
-        backgroundCircleLayer.path = backgroundPath.CGPath;
+        backgroundCircleLayer.fillColor = borderBackgroundColor.cgColor
+        backgroundCircleLayer.strokeColor = UIColor.black.cgColor
+        backgroundCircleLayer.path = backgroundPath.cgPath;
     }
     
     private func drawBorder() {
@@ -137,7 +137,7 @@ import UIKit
         borderCircleLayer.instanceCount = 30
         borderCircleLayer.instanceDelay = CFTimeInterval(1 / 30.0)
         borderCircleLayer.preservesDepth = true
-        borderCircleLayer.instanceColor = borderColor.CGColor
+        borderCircleLayer.instanceColor = borderColor.cgColor
         borderCircleLayer.instanceRedOffset = 0.0
         borderCircleLayer.instanceGreenOffset = 0.0
         borderCircleLayer.instanceBlueOffset = 0.0
@@ -146,9 +146,10 @@ import UIKit
         let angle = Float(M_PI * 2.0) / 30
         borderCircleLayer.instanceTransform = CATransform3DMakeRotation(CGFloat(angle), 0.0, 0.0, 1.0)
         let instanceLayer = CALayer()
-        let midX = CGRectGetMidX(self.bounds) - borderWidth / 2.0
+        
+        let midX = self.bounds.midX - borderWidth / 2.0
         instanceLayer.frame = CGRect(x: midX, y: 0.0, width: borderWidth, height: borderWidth)
-        instanceLayer.backgroundColor = borderBackgroundColor.CGColor
+        instanceLayer.backgroundColor = borderBackgroundColor.cgColor
         borderCircleLayer.addSublayer(instanceLayer)
         instanceLayer.opacity = 0.0
         
@@ -158,10 +159,10 @@ import UIKit
             fadeAnimation.toValue = 0.0
             fadeAnimation.duration = 1
             fadeAnimation.repeatCount = Float(Int.max)
-            instanceLayer.addAnimation(fadeAnimation, forKey: "FadeAnimation")
+            instanceLayer.add(fadeAnimation, forKey: "FadeAnimation")
         }
         else {
-            for subLayer in borderCircleLayer.sublayers {
+            for subLayer in borderCircleLayer.sublayers! {
                 if subLayer is CALayer {
                     subLayer.removeAllAnimations()
                 }
@@ -171,15 +172,15 @@ import UIKit
     }
     
     private func drawCenter() {
-        let innerRect = CGRectInset(self.bounds, borderWidth, borderWidth)
-        let centerPath = UIBezierPath(ovalInRect: CGRectMake(innerRect.minX, innerRect.minY, CGRectGetWidth(innerRect), CGRectGetHeight(innerRect)))
+        let innerRect = self.bounds.insetBy(dx: borderWidth, dy: borderWidth)
+        let centerPath = UIBezierPath(ovalIn: CGRect(x: innerRect.minX, y: innerRect.minY, width: innerRect.width, height: innerRect.height))
         centerPath.fill()
-        centerCircleLayer.fillColor = centerColor.CGColor
-        centerCircleLayer.strokeColor = UIColor.blackColor().CGColor
-        centerCircleLayer.path = centerPath.CGPath;
+        centerCircleLayer.fillColor = centerColor.cgColor
+        centerCircleLayer.strokeColor = UIColor.black.cgColor
+        centerCircleLayer.path = centerPath.cgPath;
     }
     
-    override public func drawRect(rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         self.drawBackground()
         self.drawBorder()
         self.drawCenter()

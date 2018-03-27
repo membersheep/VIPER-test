@@ -18,14 +18,14 @@ class MainWireframe {
     var rootWireframe : RootWireframe?
     
     func showMainModuleAsRoot() {
-        mainViewController = UIStoryboard(name: "Main", bundle: NSBundle(forClass: self.dynamicType)).instantiateViewControllerWithIdentifier(MainViewControllerIdentifier) as? MainViewController
-        
+        mainViewController = UIStoryboard(name: "Main", bundle: Bundle(for: type(of: self))).instantiateViewController(withIdentifier: MainViewControllerIdentifier) as? MainViewController
+
         if let mainViewController = mainViewController {
             //            mainViewController.mainModule = presenter
             //            presenter?.interface = mainViewController
-            rootWireframe?.showRootViewController(mainViewController)
+            rootWireframe?.showRootViewController(viewController: mainViewController)
         } else {
-            println("ERROR: View controller from storyboard not found")
+            print("ERROR: View controller from storyboard not found")
         }
         
     }

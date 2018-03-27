@@ -28,7 +28,7 @@ class RootWireframeTests: XCTestCase {
     func testShowRootViewController() {
         let controller = UIViewController()
         
-        rootWireframe?.showRootViewController(controller)
+        rootWireframe?.showRootViewController(viewController: controller)
         
         if let window = rootWireframe?.window {
             if let rootVC = window.rootViewController as? UINavigationController {

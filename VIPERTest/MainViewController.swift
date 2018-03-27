@@ -36,12 +36,12 @@ class MainViewController: UIViewController {
         loadingButton!.buttonPushedClosure = buttonPushed
         loadingButton!.alpha = 0;
         
-        settingsButton!.imageView!.image = settingsButton!.imageView!.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        settingsButton!.imageView!.image = settingsButton!.imageView!.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsButton!.tintColor = UIColor.MOREOrange()
         settingsButton!.animationEndedClosure = settingsButtonAnimationEnded
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animateButton()
         animateTitle()
@@ -51,18 +51,18 @@ class MainViewController: UIViewController {
     
     func animateButton() {
         loadingButton!.alpha = 0;
-        self.loadingButton!.userInteractionEnabled = false;
+        self.loadingButton!.isUserInteractionEnabled = false;
         
-        UIView.animateWithDuration(1.0, delay: 1.0, options: UIViewAnimationOptions.CurveLinear, animations: {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: UIViewAnimationOptions.curveLinear, animations: {
             self.loadingButton!.alpha = 1.0
             }, completion: { completed in
-                self.loadingButton!.userInteractionEnabled = true;
+                self.loadingButton!.isUserInteractionEnabled = true;
         })
     }
     
     func animateTitle() {
         titleViewCenterConstraint.constant = view.frame.height / 2.0 - titleView!.frame.height / 2.0 - 64
-        UIView.animateWithDuration(1.0, delay: 0.5, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.view.layoutIfNeeded()
             }, completion: { completed in
         })
@@ -71,16 +71,16 @@ class MainViewController: UIViewController {
     // MARK: Start Button
     
     @IBAction func onButtonTouched() {
-        loadingButton!.startLoadingAnimationWithTitle("Analyzing...", inTime: 0.3)
-        var timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: Selector("stopLoading"), userInfo: nil, repeats: false)
+        loadingButton!.startLoadingAnimationWithTitle(newTitle: "Analyzing...", inTime: 0.3)
+        var timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: Selector("stopLoading"), userInfo: nil, repeats: false)
     }
     
     func stopLoading() {
-        loadingButton!.stopLoadingAnimationWithTitle("Done!", inTime: 0.3)
+        loadingButton!.stopLoadingAnimationWithTitle(newTitle: "Done!", inTime: 0.3)
     }
     
     func buttonPushed() -> () {
-        performSegueWithIdentifier("analysisResultsSegue", sender: self)
+        performSegue(withIdentifier: "analysisResultsSegue", sender: self)
     }
     
     // MARK: Settings Button
@@ -90,6 +90,6 @@ class MainViewController: UIViewController {
     }
     
     func settingsButtonAnimationEnded() -> () {
-        performSegueWithIdentifier("presentSettingsSegue", sender: self)
+        performSegue(withIdentifier: "presentSettingsSegue", sender: self)
     }
 }

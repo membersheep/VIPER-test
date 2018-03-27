@@ -29,7 +29,7 @@ class LoginPresenterTests: XCTestCase {
     }
     
     func testThatSaveUserDataSavesInInteractor() {
-        presenter.saveUserData("pippo", mailAddress: "pluto")
+        presenter.saveUserData(username: "pippo", mailAddress: "pluto")
         
         XCTAssertEqual("pippo", interactor.username, "should save in interactor")
         XCTAssertEqual("pluto", interactor.mail, "should save in interactor")

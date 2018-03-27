@@ -18,8 +18,9 @@ class LoginViewControllerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle(forClass: self.dynamicType))
-        loginViewController = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController
+
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
         
         loginModule = MockLoginModule()
         loginViewController?.loginModule = loginModule
@@ -124,17 +125,17 @@ class LoginViewControllerTests: XCTestCase {
     
     func testThatAfterTextFieldsShouldReturn() {
         loginViewController?.view
-        loginViewController?.textFieldShouldReturn(UITextField())
+        loginViewController?.textFieldShouldReturn(textField: UITextField())
         
         if let loginViewController = loginViewController {
             if let usernameTextField = loginViewController.usernameTextField {
-                XCTAssertFalse(usernameTextField.isFirstResponder(), "shouldn't be first responder anymore")
+                XCTAssertFalse(usernameTextField.isFirstResponder, "shouldn't be first responder anymore")
             }
         }
         
         if let loginViewController = loginViewController {
             if let mailTextField = loginViewController.mailTextField {
-                XCTAssertFalse(mailTextField.isFirstResponder(), "shouldn't be first responder anymore")
+                XCTAssertFalse(mailTextField.isFirstResponder, "shouldn't be first responder anymore")
             }
         }
         
@@ -142,7 +143,7 @@ class LoginViewControllerTests: XCTestCase {
     
     func testThatAfterSaveButtonPressedModuleSavesData() {
         loginViewController?.view
-        loginViewController?.saveButtonPressed(loginViewController!)
+        loginViewController?.saveButtonPressed(sender: loginViewController!)
         
         if let loginModule = loginModule {
             XCTAssertTrue(loginModule.saveUserDataCalled, "saveUserData should be called")
